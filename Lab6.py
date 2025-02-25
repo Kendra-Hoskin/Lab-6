@@ -1,4 +1,6 @@
+#Importes
 import requests
+import hashlib
 
 BASE_URL = "https://download.videolan.org/pub/videolan/vlc/3.0.21/win64/"
 FILE_NAME_SHA256 = "vlc-3.0.21-win64.exe.sha256"
@@ -26,3 +28,8 @@ def download_installer():
     file_binary = response.content  
     print(f"Downloaded file size: {len(file_binary)} bytes")
     return file_binary
+
+#Step 3
+def installer_ok(installer_data, expected_sha256):
+    sha256 = hashlib.sha256(installer_data).hexdigest()
+    print(f"Computed SHA-256: {sha256}")
