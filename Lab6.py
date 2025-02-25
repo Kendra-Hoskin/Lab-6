@@ -2,6 +2,8 @@
 import requests
 import hashlib
 import pathlib
+import os
+import subprocess
 
 BASE_URL = "https://download.videolan.org/pub/videolan/vlc/3.0.21/win64/"
 FILE_NAME_SHA256 = "vlc-3.0.21-win64.exe.sha256"
@@ -49,3 +51,21 @@ def save_installer(installer_data):
         outfile.write(installer_data)
     print(f"Installer saved to: {file_path}")
     return file_path
+
+#Step 6
+def run_installer(installer_path):
+    subprocess.run([installer_path, '/L=1033', '/S'])
+    print("VLC installed successfully.")
+    installer_path.unlink()
+    print("Installer deleted.")
+
+def main():
+    expected_sha256 = get_expected_sha256()
+    installer_data = download_installer()
+
+    if installer_ok(installer_data, expected_sha256):
+        installer_path = save_installer(installer_data)
+        run_installer(installer_path)
+
+if __name__ == '__main__':
+    main()
